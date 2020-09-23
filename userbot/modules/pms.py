@@ -26,7 +26,7 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
-    "`HeY! Please don't spam. Wait for my master's approval 🙃\nMessage remaining:1 \n\n`")
+    "`HeY! Please don't spam. Wait for my master's{@ApnaAnkit} approval 🙃\nMessage remaining:1 \n\n`")
 # =================================================================
 
 NO_PM_LOG_USERS = []
@@ -77,8 +77,8 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > 2:
                     await event.respond(
-                        "`You were spamming my pm dude.`\n"
-                        "`You have been BLOCKED and reported as SPAM now. JUST FUCK OFF 🖕.`"
+                        "`You were spamming my pm dude{@ApnaAnkit}.`\n"
+                        "`Tu Ab BLOC and report Ho Gaya...`"
                     )
 
                     try:
@@ -251,7 +251,7 @@ async def blockpm(block):
     else:
         await block.client(BlockRequest(block.chat_id))
         aname = await block.client.get_entity(block.chat_id)
-        await block.edit("`You've been blocked 😡!`")
+        await block.edit("`You've been blocked{Bsdk Nikal} 😡!`")
         name0 = str(aname.first_name)
         uid = block.chat_id
 
@@ -276,7 +276,7 @@ async def unblockpm(unblock):
         replied_user = await unblock.client.get_entity(reply.from_id)
         name0 = str(replied_user.first_name)
         await unblock.client(UnblockRequest(replied_user.id))
-        await unblock.edit("`You have been unblocked 😌.`")
+        await unblock.edit("`You have been unblocked{Chal Tu Unblock Ho Gaya} 😌.`")
 
     if BOTLOG:
         await unblock.client.send_message(
