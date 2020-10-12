@@ -1,31 +1,42 @@
-#   Copyright 2019 - 2020 DarkPrinc3
-
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-
-#       http://www.apache.org/licenses/LICENSE-2.0
-
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+# credit goes to @snapdragon and @devpatel_73 for making it work on this userbot.
+#
 
 from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
 import asyncio
 from telethon import events
+import logging
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
+                    level=logging.WARNING)
+
+import coffeehouse as cf
+
+import asyncio
+import io
+from userbot.modules.sql_helper.lydia_sql import get_s, get_all_s, add_s, remove_s
+from time import time
+import coffeehouse
+from userbot import LYDIA_API_KEY
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from userbot.events import register
+from telethon import events
+from coffeehouse.lydia import LydiaAI
+from coffeehouse.api import API
+
 
 # Non-SQL Mode
 ACC_LYDIA = {}
 
-if Var.LYDIA_API_KEY:
-    api_key = Var.LYDIA_API_KEY
+if LYDIA_API_KEY:
+    api_key = LYDIA_API_KEY
     api_client = API(api_key)
     lydia = LydiaAI(api_client)
 
-@command(pattern="^.repcf", outgoing=True)
+@register(outgoing=True, pattern="^.repcf$")
 async def repcf(event):
     if event.fwd_from:
         return
@@ -36,11 +47,11 @@ async def repcf(event):
         reply = await event.get_reply_message()
         msg = reply.text
         text_rep = session.think_thought(msg)
-        await event.edit("💫 {0}".format(text_rep))
+        await event.edit("**hey friend**: {0}".format(text_rep))
     except Exception as e:
         await event.edit(str(e))
 
-@command(pattern="^.addcf", outgoing=True)
+@register(outgoing=True, pattern="^.addcf$")
 async def addcf(event):
     if event.fwd_from:
         return
@@ -58,7 +69,7 @@ async def addcf(event):
     else:
         await event.edit("Reply to a user to activate Lydia AI on them")
 
-@command(pattern="^.remcf", outgoing=True)
+@register(outgoing=True, pattern="^.remcf$")
 async def remcf(event):
     if event.fwd_from:
         return
@@ -73,7 +84,7 @@ async def remcf(event):
         await event.edit("This person does not have Lydia activated on him/her.")
 
 
-@bot.on(events.NewMessage(incoming=True))
+@register(incoming=True, disable_edited=True)
 async def user(event):
     user_text = event.text
     try:
@@ -88,3 +99,15 @@ async def user(event):
             await event.reply(text_rep)
     except (KeyError, TypeError):
         return
+
+      
+CMD_HELP.update({
+    "lydia":
+    ".addcf <username/reply>\
+\nUsage: add's lydia auto chat request in the chat.\
+\n\n.remcf <username/reply>\
+\nUsage: remove's lydia auto chat request in the chat.\
+\n\n.repcf <username/reply>\
+\nUsage: starts lydia repling to perticular person in the chat.\
+\n Note:  get your value from https://coffeehouse.intellivoid.info/dashboard."
+})
